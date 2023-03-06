@@ -1,3 +1,6 @@
+
+--next going script for creating the procedure that show statistic of table
+
 IF OBJECT_ID ( 'P_GetStatistics', 'P' ) IS NOT NULL   
     DROP PROCEDURE P_GetStatistics;  
 GO  
@@ -39,9 +42,12 @@ SELECT @sql += 'SELECT  '''+DatabaseName+''' AS DatabaseName ,
 				'''+DataType+''' AS DataType,
 				COUNT(DISTINCT ' +ColumnName+') AS CountOfDistinctValue,
 				SUM(CASE WHEN '+ColumnName+' IS NULL THEN 1 ELSE 0 END) AS CountOfNullValues,
-				
-				SUM(CASE WHEN CAST('+ColumnName+' AS binary) = CAST(UPPER('+ColumnName+') AS binary) THEN 1 ELSE 0 END) AS CountOfFullUpperCase,
-				SUM(CASE WHEN CAST('+ColumnName+' AS binary) = CAST(LOWER('+ColumnName+') AS binary) THEN 1 ELSE 0 END) AS CountOfFullLowerCase,
+				SUM(CASE WHEN CAST(LOWER('+ColumnName+') AS binary) = CAST(UPPER('+ColumnName+') AS binary) THEN 0
+						WHEN CAST('+ColumnName+' AS binary) = CAST(UPPER('+ColumnName+') AS binary) THEN 1 
+					ELSE 0 END) AS CountOfFullUpperCase,
+				SUM(CASE WHEN CAST(LOWER('+ColumnName+') AS binary) = CAST(UPPER('+ColumnName+') AS binary) THEN 0
+						WHEN CAST('+ColumnName+' AS binary) = CAST(LOWER('+ColumnName+') AS binary) THEN 1 
+						ELSE 0 END) AS CountOfFullLowerCase,
 				SUM(CASE WHEN LEN(TRIM(CHAR(32)+CHAR(9)+CHAR(10)+CHAR(13)+CHAR(160) FROM CAST('+ColumnName+' AS varchar))) = LEN(CAST('+ColumnName+' AS varchar)) 
 				    THEN 0 ELSE 1 END 
 					) AS CountOfRowsWithUnprinatableChar, 
@@ -72,7 +78,16 @@ SELECT @sql_top += 'SELECT TOP 1 '''+TableSchema+''' AS SchemaName ,
    EXECUTE(@sql_top);
 
 
- SELECT ai.*, ti.MostUsedValue, (CAST(ti.CountTopValue AS float)/CAST(ai.TableTotalRowCount AS float) * 100) AS PercentageOfRowsWithMostUsedValue
+ SELECT ai.DatabaseName , ai.SchemaName , ai.TableName , ai.TableTotalRowCount 
+			, ai.ColumnName  , ai.DataType ,  ai.CountOfDistinctValue , ai.CountOfNullValues 
+			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+			THEN ai.CountOfFullUpperCase  ELSE NULL END AS CountOfFullUpperCase
+			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+			THEN ai.CountOfFullLowerCase ELSE NULL END AS CountOfFullLowerCase
+			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+			THEN ai.CountOfRowsWithUnprinatableChar ELSE NULL END AS CountOfRowsWithUnprinatableChar
+			, ai.MinValue , ai.MaxValue 
+			, ti.MostUsedValue, (CAST(ti.CountTopValue AS float)/CAST(ai.TableTotalRowCount AS float) * 100) AS PercentageOfRowsWithMostUsedValue
  FROM #AllInfo ai
  INNER JOIN #TopInfo ti
  ON ai.SchemaName = ti.TableSchema 
@@ -84,8 +99,13 @@ SELECT @sql_top += 'SELECT TOP 1 '''+TableSchema+''' AS SchemaName ,
   DROP TABLE #TopInfo
 
  END;
+ -- end of script for creating
 
+-- to execute the procedure needed use next example
+-- EXEC P_GetStatistics Name_of_database, Name_of_schema, Name_of_table;
+-- if you need get statistics for all tables in schema use % instead Name_of_table
+-- next goes example of using
 EXEC P_GetStatistics 'TRN','hr','%';
 
-
+EXEC P_GetStatistics 'TRN','hr','countries';
 EXEC P_GetStatistics 'AdventureWorks2017','Production','Location';
