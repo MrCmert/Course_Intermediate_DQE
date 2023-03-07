@@ -19,12 +19,28 @@ IF OBJECT_ID ('tempdb..#ColumnsList') IS NOT NULL DROP TABLE #ColumnsList
 IF OBJECT_ID ('tempdb..#TopInfo') IS NOT NULL DROP TABLE #TopInfo
 
 CREATE TABLE #AllInfo (DatabaseName sysname, SchemaName sysname, TableName sysname, TableTotalRowCount int
-					, ColumnName sysname , DataType sysname,  CountOfDistinctValue int, CountOfNullValues int
+					, ColumnName sysname , DataType sysname
+					, CountOfDistinctValue int, CountOfNullValues int
 					, CountOfFullUpperCase int , CountOfFullLowerCase int , CountOfRowsWithUnprinatableChar int, MinValue varchar(max), MaxValue varchar(max))
-CREATE TABLE #ColumnsList (DatabaseName sysname, TableSchema sysname, TableName sysname, ColumnName sysname , DataType sysname)
+CREATE TABLE #ColumnsList (DatabaseName sysname, TableSchema sysname, TableName sysname, ColumnName sysname 
+							, DataType sysname)
 CREATE TABLE #TopInfo (TableSchema sysname, TableName sysname, ColumnName sysname, MostUsedValue varchar(max), CountTopValue int)
 
-SET @Query = 'SELECT table_catalog, Table_Schema, Table_Name, Column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS
+SET @Query = 'SELECT table_catalog, Table_Schema, Table_Name, Column_name, 
+				CASE WHEN (data_type = '+ CHAR(39) +'char'+ CHAR(39) +' AND CHARACTER_MAXIMUM_LENGTH <> 1)
+				THEN DATA_TYPE + '+ CHAR(39) +'('+ CHAR(39) +'+CAST(CHARACTER_MAXIMUM_LENGTH AS varchar)+'+ CHAR(39) +')'+ CHAR(39) +'
+				WHEN (data_type = '+ CHAR(39) +'varchar'+ CHAR(39) +' AND CHARACTER_MAXIMUM_LENGTH <> 80)
+				THEN DATA_TYPE + '+ CHAR(39) +'('+ CHAR(39) +'+CAST(CHARACTER_MAXIMUM_LENGTH AS varchar)+'+ CHAR(39) +')'+ CHAR(39) +'
+				WHEN (data_type = '+ CHAR(39) +'nvarchar'+ CHAR(39) +' AND CHARACTER_MAXIMUM_LENGTH <> 1)
+				THEN DATA_TYPE + '+ CHAR(39) +'('+ CHAR(39) +'+CAST(CHARACTER_MAXIMUM_LENGTH AS varchar)+'+ CHAR(39) +')'+ CHAR(39) +'
+				WHEN (data_type = '+ CHAR(39) +'decimal'+ CHAR(39) +' AND NUMERIC_PRECISION <> 18 AND NUMERIC_SCALE <> 0)
+				THEN DATA_TYPE + '+ CHAR(39) +'('+ CHAR(39) +'+CAST(NUMERIC_PRECISION AS varchar)+'+ CHAR(39)
+								  +','+ CHAR(39) +'+CAST(NUMERIC_SCALE AS varchar)+'+ CHAR(39) +')'+ CHAR(39) +'
+				WHEN (data_type = '+ CHAR(39) +'int'+ CHAR(39) +' AND NUMERIC_PRECISION <> 10 AND NUMERIC_SCALE <> 0)
+				THEN DATA_TYPE + '+ CHAR(39) +'('+ CHAR(39) +'+CAST(NUMERIC_PRECISION AS varchar)+'+ CHAR(39)
+								  +','+ CHAR(39) +'+CAST(NUMERIC_SCALE AS varchar)+'+ CHAR(39) +')'+ CHAR(39) +'
+				ELSE data_type END as data_type
+				 FROM INFORMATION_SCHEMA.COLUMNS
 				WHERE TABLE_SCHEMA = ' + CHAR(39) + @p_SchemaName + CHAR(39);
 
 IF @p_TableName <> '%'
@@ -78,13 +94,17 @@ SELECT @sql_top += 'SELECT TOP 1 '''+TableSchema+''' AS SchemaName ,
    EXECUTE(@sql_top);
 
 
- SELECT ai.DatabaseName , ai.SchemaName , ai.TableName , ai.TableTotalRowCount 
-			, ai.ColumnName  , ai.DataType ,  ai.CountOfDistinctValue , ai.CountOfNullValues 
-			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+ SELECT ai.DatabaseName , ai.SchemaName , ai.TableName , ai.TableTotalRowCount , ai.ColumnName  
+			, ai.DataType
+			,  ai.CountOfDistinctValue , ai.CountOfNullValues 
+			, CASE WHEN (ai.DataType LIKE 'text%' OR ai.DataType LIKE 'ntext%' 
+						OR ai.DataType LIKE 'varchar%' OR ai.DataType LIKE 'nvarchar%' OR ai.DataType LIKE 'char%' OR ai.DataType LIKE 'nchar%') 
 			THEN ai.CountOfFullUpperCase  ELSE NULL END AS CountOfFullUpperCase
-			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+			, CASE WHEN (ai.DataType LIKE 'text%' OR ai.DataType LIKE 'ntext%' 
+						OR ai.DataType LIKE 'varchar%' OR ai.DataType LIKE 'nvarchar%' OR ai.DataType LIKE 'char%' OR ai.DataType LIKE 'nchar%') 
 			THEN ai.CountOfFullLowerCase ELSE NULL END AS CountOfFullLowerCase
-			, CASE WHEN ai.DataType in ('text','ntext','varchar','nvarchar','char','nchar') 
+			, CASE WHEN (ai.DataType LIKE 'text%' OR ai.DataType LIKE 'ntext%' 
+						OR ai.DataType LIKE 'varchar%' OR ai.DataType LIKE 'nvarchar%' OR ai.DataType LIKE 'char%' OR ai.DataType LIKE 'nchar%') 
 			THEN ai.CountOfRowsWithUnprinatableChar ELSE NULL END AS CountOfRowsWithUnprinatableChar
 			, ai.MinValue , ai.MaxValue 
 			, ti.MostUsedValue, (CAST(ti.CountTopValue AS float)/CAST(ai.TableTotalRowCount AS float) * 100) AS PercentageOfRowsWithMostUsedValue
