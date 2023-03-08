@@ -65,7 +65,10 @@ SELECT @sql += 'SELECT  '''+DatabaseName+''' AS DatabaseName ,
 						WHEN CAST('+ColumnName+' AS binary) = CAST(LOWER('+ColumnName+') AS binary) THEN 1 
 						ELSE 0 END) AS CountOfFullLowerCase,
 				SUM(CASE WHEN LEN(TRIM(CHAR(32)+CHAR(9)+CHAR(10)+CHAR(13)+CHAR(160) FROM CAST('+ColumnName+' AS varchar))) = LEN(CAST('+ColumnName+' AS varchar)) 
-				    THEN 0 ELSE 1 END 
+				    THEN 0 
+					WHEN '+ColumnName+' is null 
+					then 0
+					ELSE 1 END 
 					) AS CountOfRowsWithUnprinatableChar, 
 				MIN('+ColumnName+') AS MinValue,
 				MAX('+ColumnName+') AS MaxValue
@@ -127,5 +130,5 @@ SELECT @sql_top += 'SELECT TOP 1 '''+TableSchema+''' AS SchemaName ,
 -- next goes example of using
 EXEC P_GetStatistics 'TRN','hr','%';
 
-EXEC P_GetStatistics 'TRN','hr','countries';
+EXEC P_GetStatistics 'TRN','hr','employees';
 EXEC P_GetStatistics 'AdventureWorks2017','Production','Location';
