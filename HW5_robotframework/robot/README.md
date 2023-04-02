@@ -14,7 +14,8 @@ pip install robotframework pymssql robotframework-databaselibrary
 
 
 Before running the tests, you need to provide the necessary connection 
-details to the database in the Variables section of the TestCasesMSSQL.robot file:
+details to the database in the Variables section of the 
+Resources\Variables.robot file.
 Update the values to match the database connection details.
 
 To run the tests, navigate to the root directory 
