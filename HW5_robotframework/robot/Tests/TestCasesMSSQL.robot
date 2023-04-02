@@ -1,16 +1,8 @@
 *** Settings ***
+
 Suite Setup       Connect To Database    pymssql     ${DB_NAME}   ${DB_USER}   ${DB_PASSWORD}   ${DB_HOST}   ${DB_PORT}
 Suite Teardown    Disconnect From Database
-Library           DatabaseLibrary
-Library           OperatingSystem
-Library           pymssql
-
-*** Variables ***
-${DB_HOST}        localhost
-${DB_NAME}        AdventureWorks2012
-${DB_USER}        NewLogin
-${DB_PASSWORD}    1234567890
-${DB_PORT}        50768
+Resource   ../Resources/Variables.robot
 
 *** Test Cases ***
 Table [Person].[Address]. Lengths of values of column rowguid is equal 36 for all records
