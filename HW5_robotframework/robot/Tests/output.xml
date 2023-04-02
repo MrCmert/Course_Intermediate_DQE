@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.0.2 (Python 3.11.0 on win32)" generated="20230402 21:19:18.071" rpa="false" schemaversion="3">
+<robot generator="Robot 6.0.2 (Python 3.11.0 on win32)" generated="20230402 21:42:32.237" rpa="false" schemaversion="3">
 <suite id="s1" name="Tests" source="C:\Users\Vitalii_Stetsenko\PycharmProjects\Course_Intermediate_DQE\HW5_robotframework\robot\Tests">
 <suite id="s1-s1" name="CheckTablePersonAddress" source="C:\Users\Vitalii_Stetsenko\PycharmProjects\Course_Intermediate_DQE\HW5_robotframework\robot\Tests\CheckTablePersonAddress.robot">
 <test id="s1-s1-t1" name="Check rowguid column in Person.Address table for correct length" line="13">
@@ -11,14 +11,14 @@
 <arg>database=${DB_NAME}</arg>
 <doc>Constructor for creating a connection to the database. Returns a
 Connection object.</doc>
-<msg timestamp="20230402 21:19:18.136" level="FAIL">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=localhost)\n')</msg>
-<status status="FAIL" starttime="20230402 21:19:18.106" endtime="20230402 21:19:18.136"/>
+<msg timestamp="20230402 21:42:32.304" level="FAIL">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=EPUAKYIW1839)\n')</msg>
+<status status="FAIL" starttime="20230402 21:42:32.275" endtime="20230402 21:42:32.305"/>
 </kw>
 <kw name="Set Variable" library="BuiltIn">
 <var>${query}</var>
 <arg>SELECT [rowguid] FROM [Person].[Address]</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="NOT RUN" starttime="20230402 21:19:18.136" endtime="20230402 21:19:18.136"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.305" endtime="20230402 21:42:32.305"/>
 </kw>
 <kw name="Query" library="DatabaseLibrary">
 <var>${results}</var>
@@ -27,7 +27,7 @@ Connection object.</doc>
 <doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
 input `sansTran` to True to run command without an explicit transaction commit or rollback.
 Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </kw>
 <for flavor="IN">
 <var>${row}</var>
@@ -38,43 +38,81 @@ Set optional input `returnAsDict` to True to return values as a list of dictiona
 <var>${rowguid}</var>
 <arg>${row}[rowguid]</arg>
 <doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </kw>
 <kw name="Get Length" library="BuiltIn">
 <var>${length}</var>
 <arg>${rowguid}</arg>
 <doc>Returns and logs the length of the given item as an integer.</doc>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </kw>
 <kw name="Should Be Equal As Integers" library="BuiltIn">
 <arg>${length}</arg>
 <arg>36</arg>
 <arg>msg=Rowguid ${rowguid} has length ${length}, which is not 36.</arg>
 <doc>Fails if objects are unequal after converting them to integers.</doc>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </kw>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </iter>
-<status status="NOT RUN" starttime="20230402 21:19:18.137" endtime="20230402 21:19:18.137"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.306" endtime="20230402 21:42:32.306"/>
 </for>
 <kw name="${conn}.close()">
-<status status="NOT RUN" starttime="20230402 21:19:18.138" endtime="20230402 21:19:18.138"/>
+<status status="NOT RUN" starttime="20230402 21:42:32.308" endtime="20230402 21:42:32.308"/>
 </kw>
-<status status="FAIL" starttime="20230402 21:19:18.106" endtime="20230402 21:19:18.139">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=localhost)\n')</status>
+<status status="FAIL" starttime="20230402 21:42:32.274" endtime="20230402 21:42:32.308">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=EPUAKYIW1839)\n')</status>
 </test>
-<status status="FAIL" starttime="20230402 21:19:18.088" endtime="20230402 21:19:18.139"/>
+<test id="s1-s1-t2" name="Verify empty result set" line="25">
+<kw name="Connect" library="pymssql">
+<var>${conn}</var>
+<arg>server=${DB_HOST}</arg>
+<arg>user=${DB_USER}</arg>
+<arg>password=${DB_PASSWORD}</arg>
+<arg>database=${DB_NAME}</arg>
+<doc>Constructor for creating a connection to the database. Returns a
+Connection object.</doc>
+<msg timestamp="20230402 21:42:32.314" level="FAIL">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=EPUAKYIW1839)\n')</msg>
+<status status="FAIL" starttime="20230402 21:42:32.310" endtime="20230402 21:42:32.315"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${query}</var>
+<arg>SELECT * FROM [Person].[Address] WHERE ModifiedDate &gt; CURRENT_TIMESTAMP</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20230402 21:42:32.315" endtime="20230402 21:42:32.315"/>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<var>${results}</var>
+<arg>${conn}</arg>
+<arg>${query}</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<status status="NOT RUN" starttime="20230402 21:42:32.315" endtime="20230402 21:42:32.315"/>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<arg>${results}</arg>
+<arg>msg=Query returned ${len(results)} record(s), but should have returned 0.</arg>
+<doc>Verifies that the given item is empty.</doc>
+<status status="NOT RUN" starttime="20230402 21:42:32.315" endtime="20230402 21:42:32.315"/>
+</kw>
+<kw name="${conn}.close()">
+<status status="NOT RUN" starttime="20230402 21:42:32.316" endtime="20230402 21:42:32.316"/>
+</kw>
+<status status="FAIL" starttime="20230402 21:42:32.310" endtime="20230402 21:42:32.317">OperationalError: (20009, b'DB-Lib error message 20009, severity 9:\nUnable to connect: Adaptive Server is unavailable or does not exist (server=EPUAKYIW1839)\n')</status>
+</test>
+<status status="FAIL" starttime="20230402 21:42:32.255" endtime="20230402 21:42:32.318"/>
 </suite>
-<status status="FAIL" starttime="20230402 21:19:18.072" endtime="20230402 21:19:18.140"/>
+<status status="FAIL" starttime="20230402 21:42:32.238" endtime="20230402 21:42:32.318"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="1" skip="0">All Tests</stat>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="0" fail="1" skip="0" id="s1" name="Tests">Tests</stat>
-<stat pass="0" fail="1" skip="0" id="s1-s1" name="CheckTablePersonAddress">Tests.CheckTablePersonAddress</stat>
+<stat pass="0" fail="2" skip="0" id="s1" name="Tests">Tests</stat>
+<stat pass="0" fail="2" skip="0" id="s1-s1" name="CheckTablePersonAddress">Tests.CheckTablePersonAddress</stat>
 </suite>
 </statistics>
 <errors>

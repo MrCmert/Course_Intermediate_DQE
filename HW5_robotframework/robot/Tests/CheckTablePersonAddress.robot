@@ -20,3 +20,11 @@ Check rowguid column in Person.Address table for correct length
         Should Be Equal As Integers    ${length}    36    msg=Rowguid ${rowguid} has length ${length}, which is not 36.
     END
     ${conn}.close()
+
+
+Verify empty result set
+    ${conn}=    pymssql.Connect    server=${DB_HOST}    user=${DB_USER}    password=${DB_PASSWORD}    database=${DB_NAME}
+    ${query}=    Set Variable    SELECT * FROM [Person].[Address] WHERE ModifiedDate > CURRENT_TIMESTAMP
+    ${results}=    Query    ${conn}    ${query}
+    Should Be Empty    ${results}    msg=Query returned ${len(results)} record(s), but should have returned 0.
+    ${conn}.close()
