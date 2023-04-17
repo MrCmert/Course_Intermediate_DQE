@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('install req') {
+            steps {
+            sh 'pip3 install -r requirements.txt'
+            }
+         }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Robot Framework Tests') {
+            steps {
+                sh 'robot -d Results results HW5_robotframework/robot/Tests/TestCasesMSSQL.robot'
+            }
+        }
+
+        stage('Publish Test Results') {
+            steps {
+                robotPublisher(
+                    outputPath: 'results',
+                    outputFilePattern: '**/*.xml'
+                )
+            }
+        }
+    }
+}
