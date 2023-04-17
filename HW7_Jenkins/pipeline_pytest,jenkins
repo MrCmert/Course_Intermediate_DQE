@@ -1,8 +1,11 @@
 stage("test PythonEnv") {
     agent any
 
-    withPythonEnv('python3') {
-        sh 'pip install pytest'
-        sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
-    }
+    stages {
+        stage('pytest') {
+            steps {
+            sh 'pip install pytest'
+            sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
+            }
+         }
 }
