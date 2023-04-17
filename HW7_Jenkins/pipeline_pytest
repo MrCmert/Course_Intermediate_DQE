@@ -1,0 +1,7 @@
+stage("test PythonEnv") {
+
+    withPythonEnv('python3') {
+        sh 'pip install pytest'
+        sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
+    }
+}
