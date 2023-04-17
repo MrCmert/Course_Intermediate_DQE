@@ -1,4 +1,4 @@
-stage("test PythonEnv") {
+pipeline {
     agent any
 
     stages {
@@ -7,4 +7,5 @@ stage("test PythonEnv") {
             sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
             }
          }
+    }
 }
