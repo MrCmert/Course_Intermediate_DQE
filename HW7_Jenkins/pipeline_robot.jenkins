@@ -16,7 +16,7 @@ pipeline {
 
         stage('Robot Framework Tests') {
             steps {
-                sh 'robot -d Results results HW5_robotframework/robot/Tests/TestCasesMSSQL.robot'
+                sh 'robot -d Results HW5_robotframework/robot/Tests/TestCasesMSSQL.robot'
             }
         }
 
