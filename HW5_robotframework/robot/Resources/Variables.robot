@@ -6,7 +6,7 @@ Library           OperatingSystem
 Library           pymssql
 
 *** Variables ***
-${DB_HOST}        127.0.0.1
+${DB_HOST}        EPUAKYIW1839\SQLEXPRESS
 ${DB_NAME}        AdventureWorks2012
 ${DB_USER}        NewLogin
 ${DB_PASSWORD}    1234567890
