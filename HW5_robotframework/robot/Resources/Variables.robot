@@ -10,4 +10,4 @@ ${DB_HOST}        127.0.0.1
 ${DB_NAME}        AdventureWorks2012
 ${DB_USER}        NewLogin
 ${DB_PASSWORD}    1234567890
-${DB_PORT}        50768
+${DB_PORT}        1433
