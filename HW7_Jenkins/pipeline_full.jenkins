@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('install req') {
+            steps {
+            sh 'pip3 install -r HW7_Jenkins/requirements.txt'
+            }
+         }
+
+
+        stage('Robot Framework Tests') {
+            steps {
+                sh 'robot -d Results HW5_robotframework/robot/Tests/TestCasesMSSQL.robot'
+            }
+        }
+
+        stage('pytest tests') {
+            steps {
+            sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
+            }
+         }
+
+        stage('Publish Test Results') {
+            steps {
+                robotPublisher(
+                    outputPath: 'results',
+                    outputFilePattern: '**/*.xml'
+                )
+            }
+        }
+    }
+}
