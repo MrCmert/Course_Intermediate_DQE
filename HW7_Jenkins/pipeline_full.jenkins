@@ -32,21 +32,6 @@ pipeline {
                         , passThreshold: 100
                         , reportFileName: 'report.html'
                         , unstableThreshold: 0])
-                script {
-                    step(
-                            [
-                            $class                    : 'RobotPublisher',
-                            outputPath                : '/Results',
-                            outputFileName            : "*.xml",
-                            reportFileName            : "report.html",
-                            logFileName               : "log.html",
-                            disableArchiveOutput      : false,
-                            passThreshold             : 100,
-                            unstableThreshold         : 95.0,
-                               otherFiles                : "*.png"
-                            ]
-                        )
-                    }
                    }
         }
     }
