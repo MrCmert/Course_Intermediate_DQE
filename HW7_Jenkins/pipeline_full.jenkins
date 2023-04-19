@@ -18,10 +18,11 @@ pipeline {
         stage('pytest tests') {
             steps {
             sh 'pytest HW6_pytest/pytest/test_sql_server_db.py'
+            sh 'pytest --html=report.html --self-contained-html --quiet'
             }
          }
 
-        stage('Publish Test Results') {
+        stage('Publish Test Results Robot') {
             steps {
                 step([$class: 'RobotPublisher'
                         , disableArchiveOutput: false
@@ -34,5 +35,17 @@ pipeline {
                         , unstableThreshold: 0])
                    }
         }
+        stage('Publish Report Pytest') {
+      steps {
+        publishHTML([
+          allowMissing: false,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: '',
+          reportFiles: 'report.html',
+          reportName: 'Pytest HTML Report'
+        ])
+      }
+    }
     }
 }
