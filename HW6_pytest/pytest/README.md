@@ -5,7 +5,7 @@ Setup
 To run this code, you must have pytest and pymssql installed in your environment.
 
 Use the following command to install the required libraries:
-pip install pytest pymssql 
+pip install pytest pymssql pytest-html
 
 
 Before running the tests, you need to provide the necessary connection 
