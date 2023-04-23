@@ -1,7 +1,7 @@
 
 #### This is a sample Robot Framework project to test SQL queries against a Microsoft SQL Server database using the pymssql library.
 
-## Create a virtual environment for test execution:
+## Create a virtual environment for test execution
 
 The following are the pre-requisites for running the tests in this project:
 
@@ -31,4 +31,4 @@ To run the tests, navigate to the root directory of the project and execute the 
 The output of the tests will be displayed on the console. 
 If a test fails, the reason for failure will be displayed in the console output. Additionally, Robot Framework will generate an HTML report and a log file in the output directory. Path to your report: *{path to the project}/HW5_robotframework/robot/report.html*
 The HTML report can be opened in a web browser to view the results of the tests. 
-Example of [report](HW5_robotframework/robot/report.html "Named link title")
+Example of [report](https://github.com/MrCmert/Course_Intermediate_DQE/blob/main/HW5_robotframework/robot/report.html "Named link title")
