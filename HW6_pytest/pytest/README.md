@@ -13,9 +13,9 @@ The following are the pre-requisites for running the tests in this project:
 To run this code, you must have pytest and pymssql installed in your environment.
 
 1. Use the following command to install the required libraries:
-*pip install pytest pymssql pytest-html*
-2. Open folder where project will be and use the following command in CLI to clone project to your local machine (**git should be installed**)
- *gh repo clone MrCmert/Course_Intermediate_DQE*
+***pip install pytest pymssql pytest-html***
+2. Open folder where project will be and use the following command in CLI to clone project to your local machine (**git should be installed**):
+ ***gh repo clone MrCmert/Course_Intermediate_DQE***
 
 ## Database Connection Setup
 
@@ -25,7 +25,7 @@ Update the values to match your database connection details.
 
 ## Run pytest tests
 To run the tests, navigate to the root directory of the project and execute the following command:
-*pytest test_sql_server_db.py*
+***pytest test_sql_server_db.py***
 
 This test suite contains nine test cases.
 The output of the tests will be displayed on the console. 
@@ -33,7 +33,7 @@ The output of the tests will be displayed on the console.
 ## Test Cases Run Result
 
 To generate the report execute the following command:
-*pytest --html=report.html --self-contained-html*
+***pytest --html=report.html --self-contained-html***
 
 To find your report follow to: *{path to the project}/HW6_pytest/pytest/report.html*
 The HTML report can be opened in a web browser to view the results of the tests. 
